@@ -17,3 +17,7 @@
 # On AI-assistend Changes
 - When submitting a pull request that involved AI assistance, mention the tools you used, what you used them for and the extent of their involvement.
 - **Use AI Responsibly**. When writing code, test and review AI code before submitting a pull request. Unreviewed AI-generated code won't be accepted. When writing documentation, review and edit the output as AI tends to yap a lot. Make sure documentation is concise and clear.
+
+# Updating Documentation
+- If any changes/features/fixes would make any information in the repo's README obsolete, make sure to update it. Formatting and content is up to you, but try not to stray far away from the current "style".
+- Document any new or updated endpoints in the "Endpoints" section of the repo's README.
