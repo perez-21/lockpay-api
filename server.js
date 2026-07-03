@@ -3,8 +3,8 @@ const cors = require("cors");
 const helmet = require("helmet");
 const hpp = require("hpp");
 const morganMiddleware = require("./middleware/morgan");
-const { ENV } = require("./shared/config");
-
+const errorHandler = require("./middleware/error-handler");
+const config = require("./shared/config");
 
 
 const app = express();
@@ -22,9 +22,11 @@ const router = express.Router();
 
 
 router.get('/health', (req, res) => {
-  res.send({ok: true, environment: ENV});
+  res.send({ok: true, environment: config.ENV});
 });
 
 app.use('/api', router);
+
+app.use(errorHandler);
 
 module.exports = app;

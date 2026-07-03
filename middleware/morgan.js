@@ -1,5 +1,5 @@
 const morgan = require("morgan");
-const logger = require("../logger");
+const logger = require("../shared/logger");
 
 const morganMiddleware = morgan(
   ":method :url :status :res[content-length] - response-time ms",
