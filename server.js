@@ -1,29 +1,32 @@
 const express = require("express");
 const cors = require("cors");
-const morgan = require("morgan");
-const logger = require("./logger");
+const helmet = require("helmet");
+const hpp = require("hpp");
+const morganMiddleware = require("./middleware/morgan");
+const errorHandler = require("./middleware/error-handler");
+const config = require("./shared/config");
 
 
 const app = express();
 
+app.disable("x-powered-by");
+
+app.use(helmet());
+app.use(hpp());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
-
-const morganMiddleware = morgan(':method :url :status :res[content-length] - response-time ms', {
-  stream: {
-    write: (message) => logger.http(message.trim()),
-  }
-});
 app.use(morganMiddleware);
 
 const router = express.Router();
 
 
 router.get('/health', (req, res) => {
-  res.send({ok: true});
+  res.send({ok: true, environment: config.ENV});
 });
 
 app.use('/api', router);
+
+app.use(errorHandler);
 
 module.exports = app;
