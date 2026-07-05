@@ -22,7 +22,7 @@ const validate = (schema) => (req, res, next) => {
     return next(new BadRequestError(errorMessage));
   }
 
-  Object.assign(req, { params, query, body });
+  Object.assign(req, value);
   return next();
 };
 
