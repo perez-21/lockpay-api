@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  CLIENT @map("client")
+  FREELANCER @map("freelancer")
+  ADMIN @map("admin")
+}
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  password String
+  firstname String
+  lastname String
+  role Role
+}
+
+/*
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    role VARCHAR(50) NOT NULL CHECK (role IN ('CLIENT', 'FREELANCER', 'ADMIN')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TYPE escrow_status AS ENUM ('INITIALIZED', 'LOCKED', 'DISBURSED', 'DISPUTED', 'RESOLVED');
+CREATE TYPE resolution_outcome AS ENUM ('REFUND_CLIENT', 'PAY_FREELANCER', 'SPLIT');
+
+CREATE TABLE escrows (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    client_id INT REFERENCES users(id) ON DELETE RESTRICT,
+    freelancer_id INT REFERENCES users(id) ON DELETE RESTRICT,
+    amount_kobo INT NOT NULL CHECK (amount_kobo > 0), 
+    status escrow_status DEFAULT 'INITIALIZED',
+    nomba_virtual_account VARCHAR(100) UNIQUE,
+    nomba_reference VARCHAR(100) UNIQUE,
+    dispute_reason TEXT,
+    dispute_raised_by INT REFERENCES users(id),
+    review_window_expires_at TIMESTAMP,
+    resolution_outcome resolution_outcome,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+*/
