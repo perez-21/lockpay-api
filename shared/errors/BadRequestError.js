@@ -7,4 +7,4 @@ class BadRequestError extends ApiError {
   }
 }
 
-module.exports = BadRequestError;
+module.exports = BadRequestError; 
