@@ -4,28 +4,26 @@ const InternalServerError = require("../shared/errors/InternalServerError");
 const ForbiddenError = require("../shared/errors/ForbiddenError");
 const { roleRights } = require("../shared/auth/roles");
 
-const auth = (...requiredPermissions) =>
-  passport.authenticate("jwt", (err, user, info, status) => {
+const auth = (...requiredPermissions) => (req, res, next) =>
+  passport.authenticate("jwt", {session: false}, (err, user, info, status) => {
     if (err) {
-      throw new InternalServerError(
+      return  next(InternalServerError(
         "There was a problem authenticating this request",
-      );
+      ));
     }
 
     if (!user) {
-      throw new UnauthorizedError(
+      return next(UnauthorizedError(
         "You do not have the credentials to access this resource",
-      );
+      ));
     }
 
     if (requiredPermissions.length) {
-      const userRights = roleRights.get(user.role);
+      const userRights = roleRights.get(user.role) || [];
+      const hasAllPermissions = requiredPermissions.every((permission) => userRights.includes(permission));
 
-      for (permission in requiredPermissions) {
-        if (!userRights.includes(permission))
-          throw new ForbiddenError(
-            "You are not authorized to access this resource",
-          );
+      if (!hasAllPermissions) {
+        return next(new ForbiddenError("You are not authorized to access this resource"));
       }
     }
 

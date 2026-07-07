@@ -18,7 +18,7 @@ const login = {
   body: Joi.object().keys(
     {
       email: Joi.string().required().email(),
-      password: Joi.string().required().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+      password: Joi.string().required().trim().min(8).max(64),
       role: Joi.string().uppercase().valid(...roles.filter((role) => role !== Role.ADMIN)),
     }
   )
