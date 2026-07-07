@@ -1,7 +1,17 @@
 const server = require("./server");
+const prismaClient = require("./shared/prismaClient");
 const logger = require("./shared/logger");
-const { PORT } = require("./shared/config");
+const config = require("./shared/config");
+const { error } = require("winston");
 
-server.listen(PORT, () => {
-  logger.info(`Listening on port ${PORT}`);
-});
+prismaClient
+  .$connect()
+  .then(() => {
+    server.listen(config.PORT, () => {
+      logger.info(`Listening on port ${config.PORT}`);
+    });
+  })
+  .catch((error) => {
+    logger.error("Failed to connect to the database:", error);
+    process.exit(1);
+  });

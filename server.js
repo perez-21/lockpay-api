@@ -5,6 +5,7 @@ const hpp = require("hpp");
 const morganMiddleware = require("./middleware/morgan");
 const errorHandler = require("./middleware/error-handler");
 const config = require("./shared/config");
+const router = require("./routes/v1/index");
 
 
 const app = express();
@@ -17,9 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(morganMiddleware);
-
-const router = express.Router();
-
 
 router.get('/health', (req, res) => {
   res.send({ok: true, environment: config.ENV});
