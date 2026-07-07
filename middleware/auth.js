@@ -7,13 +7,13 @@ const { roleRights } = require("../shared/auth/roles");
 const auth = (...requiredPermissions) => (req, res, next) =>
   passport.authenticate("jwt", {session: false}, (err, user, info, status) => {
     if (err) {
-      return  next(InternalServerError(
+      return  next(new InternalServerError(
         "There was a problem authenticating this request",
       ));
     }
 
     if (!user) {
-      return next(UnauthorizedError(
+      return next(new UnauthorizedError(
         "You do not have the credentials to access this resource",
       ));
     }
@@ -28,6 +28,7 @@ const auth = (...requiredPermissions) => (req, res, next) =>
     }
 
     req.user = user;
+    next();
   });
 
 module.exports = auth;
